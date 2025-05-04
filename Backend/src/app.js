@@ -2,8 +2,6 @@ import express from "express"
 import cors from "cors"
 import cookieParser from "cookie-parser";
 
-// cookie-parser => ki m mere server se user ka browser haina uski  andar ki cookies access kar paau or set kr paau => basically crud operations perform kr paau
-
 const app = express();
 
 app.use(cors({
@@ -16,13 +14,16 @@ app.use(express.json({
     limit: "16kb"
 }))
 
+// a middleware that enables the server to parse incoming URL-encoded form data
 app.use(express.urlencoded({
     extended : true,
     limit : "16kb"
 }))
 
+// tells Express to serve static content from the public directory
 app.use(express.static("public"))
 
+// cookie-parser => ki m mere server se user ka browser haina uski  andar ki cookies access kar paau or set kr paau => basically crud operations perform kr paau
 app.use(cookieParser())
 
 export { app }; 

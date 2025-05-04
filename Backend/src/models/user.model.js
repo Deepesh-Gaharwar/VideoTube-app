@@ -89,6 +89,7 @@ userSchema.methods.generateAccessToken = function (){
         
     )
 }
+
 userSchema.methods.generateRefreshToken = function (){
     return  jwt.sign( // current , or 2nd db se aarha h
         {

@@ -62,7 +62,7 @@ userSchema.pre("save",async function (next) { // hm this.password => wala if con
     if(!this.isModified("password")) return next();
 
 // if modified then first encrypt the password -> then call the next()
-    this.password = bcrypt.hash(this.password, 10)
+    this.password = await bcrypt.hash(this.password, 10)
         next()
 } )
 

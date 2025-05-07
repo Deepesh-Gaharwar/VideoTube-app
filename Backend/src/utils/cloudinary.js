@@ -18,8 +18,12 @@ import fs from "fs" // given by node.js -> donot have to install  a package for 
                 resource_type :"auto"
             })
 
+            fs.unlinkSync(localFilePath); // if file uploads successfully or not , file will be removed from the local server -> /public/temp
+
+         //  console.log(response) 
+
             // file has been uploaded successfully
-            console.log("File uploaded successfully" , response.url);
+          //  console.log("File uploaded successfully" , response.url);
 
             return response;
 

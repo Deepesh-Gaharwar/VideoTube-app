@@ -7,6 +7,7 @@ import jwt from "jsonwebtoken"
 import mongoose from "mongoose";
 
 
+// generate access and refresh tokens
 const generateAccessAndRefreshTokens = async(userId) => {
 
   try {
@@ -194,8 +195,8 @@ const logoutUser = asyncHandler( async(req,res) => {
   await User.findByIdAndUpdate(
     req.user._id,
     {
-      $set : {
-        refreshToken : undefined
+      $unset : {
+        refreshToken : 1 // this removes the field from document 
       }
     },
     {
@@ -415,7 +416,7 @@ const getUserChannelProfile = asyncHandler(async (req,res) => {
     {
       $lookup : {
         from : "subscriptions",
-        localfield : "_id",
+        localField : "_id",
         foreignField : "channel",
         as : "subscribers"
       }
@@ -423,7 +424,7 @@ const getUserChannelProfile = asyncHandler(async (req,res) => {
     {
       $lookup : {
         from : "subscriptions",
-        localfield : "_id",
+        localField : "_id",
         foreignField : "subscriber",
         as : "subscribedTo"
       }
@@ -478,7 +479,7 @@ const getUserChannelProfile = asyncHandler(async (req,res) => {
 // get watch history 
 
 const getWatchHistory = asyncHandler(async (req,res) => {
-   const user  = await user.aggregate([
+   const user  = await User.aggregate([
     {
       $match : {
         _id : new mongoose.Types.ObjectId(req.user._id) 
@@ -487,14 +488,14 @@ const getWatchHistory = asyncHandler(async (req,res) => {
     {
       $lookup : {
          from : "videos",
-         localfield : "watchHistory",
+         localField : "watchHistory",
          foreignField : "_id",
          as : "watchHistory",
          pipeline : [
           {
             $lookup : {
               from : "users",
-              localfield : "owner",
+              localField : "owner",
               foreignField : "_id",
               as : "owner",
               pipeline :[
@@ -524,7 +525,7 @@ const getWatchHistory = asyncHandler(async (req,res) => {
    return res
     .status(200)
     .json(
-      new APiResponse(
+      new APiResponse(200,
         user[0].watchHistory,
         "watch history fetched successfully"
       )

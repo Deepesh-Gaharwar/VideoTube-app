@@ -33,7 +33,52 @@ import fs from "fs" // given by node.js -> donot have to install  a package for 
             return null;
         }
     }
+  
+  // delete on cloudinary video  
+    const deleteOnCLoudinaryVideo = async(oldFilePublicId) => {
+         try {
+
+            if(!oldFilePublicId){
+                return null ;
+            }
+
+            const publicId = oldFilePublicId.split("/").pop().split(".")[0];
+
+            const response = await cloudinary.uploader.destroy(publicId, { invalidate: true, resource_type: 'video'});
+
+   
+            return response;
+            
+         } catch (error) {
+            return error;
+         }
+    }
+
+  
+    // delete on cloudinary image
+    const deleteOnCloudinaryImage = async (oldFilePublicId) => {
+
+  try {
+    if(!oldFilePublicId) return null;
+
+    // delete the file on cloudinary.
+
+    const public_id = oldFilePublicId.split("/").pop().split(".")[0] ;
+
+    const response = await cloudinary.uploader.destroy(public_id, { invalidate: true, resource_type: 'raw'});
+
+    
+    return response;
+  } 
+  catch (error) {
+    return error;
+  }
+};
 
 
-    export {uploadOnCloudinary};
+    export {
+        uploadOnCloudinary,
+        deleteOnCLoudinaryVideo,
+        deleteOnCloudinaryImage
+    };
 
